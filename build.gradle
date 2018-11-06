@@ -2,7 +2,7 @@ def libraryGroup =  'org.rekotlin'
 def libraryVersion = '1.0.0'
 
 buildscript {
-    ext.kotlin_version = '1.2.30'
+    ext.kotlin_version = '1.3.0'
     ext.dokka_version = '0.9.15'
     ext.junitPlugin_version = '1.0.0'
     ext.junit_jupiter_version = '5.0.0-M6'
@@ -32,7 +32,7 @@ repositories {
 }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     testCompile "org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version"
     testRuntime "org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version"
     testRuntime "org.junit.platform:junit-platform-launcher:$junit_platform_launcher"
