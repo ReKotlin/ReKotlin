@@ -1,5 +1,5 @@
 def libraryGroup =  'org.rekotlin'
-def libraryVersion = '1.0.0'
+def libraryVersion = '1.1.0'
 
 buildscript {
     ext.kotlin_version = '1.3.0'
