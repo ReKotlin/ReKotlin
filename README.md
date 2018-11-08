@@ -16,6 +16,11 @@ ReKotlin is a [Redux](https://github.com/reactjs/redux)-like implementation of t
 
 The ReKotlin library is tiny - allowing users to dive into the code, understand every single line and hopefully contribute.
 
+## Multiplatform Support
+ReKotlin is a pure Kotlin library without any platform dependencies.  It is configured as a multiplatform library and the artifacts are ready for use in a multiplatform project as of v1.1.0.
+
+A sample of a extremely simple multiple platform app (Android & iOS) is in the `sample` module. 
+
 ## About ReKotlin
 
 ReKotlin relies on a few principles:

@@ -1,2 +1,18 @@
+pluginManagement {
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.id == "kotlin-multiplatform") {
+                useModule("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
+            }
+        }
+    }
+}
+
 rootProject.name = 'rekotlin'
 
+
+enableFeaturePreview('GRADLE_METADATA')
+
+include ':lib'
+include ':sample'
+include ':sample:app'

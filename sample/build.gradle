@@ -1,0 +1,10 @@
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+}
+repositories {
+    google()
+    jcenter()
+}
