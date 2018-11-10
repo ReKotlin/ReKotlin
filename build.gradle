@@ -19,9 +19,6 @@ allprojects {
         maven { url "http://kotlin.bintray.com/kotlin-eap" }
         maven { url "http://kotlin.bintray.com/kotlin-dev" }
         maven { url "https://kotlin.bintray.com/kotlinx" }
-//        maven { url "https://dl.bintray.com/kotlin/ktor" }
-        maven { url "https://dl.bintray.com/sargunster/maven" }
-//        maven { url "https://dl.bintray.com/kotlin/squash" }
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
 
         google()
