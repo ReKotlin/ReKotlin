@@ -209,4 +209,33 @@ internal class StoreSubscriptionTests {
         store.unsubscribe(blockSubscriptions)
         assertEquals(0, store.subscriptions.count())
     }
+
+    @Test
+    fun testSubscribeDuringOnNewState() {
+        // setup
+        val reducer = TestValueStringReducer()
+        val store = Store(reducer = reducer::handleAction, state = TestStringAppState())
+
+        val subscribeA = ViewSubscriberTypeA(store)
+        store.subscribe(subscribeA)
+
+        // execute
+        store.dispatch(SetValueStringAction("subscribe"))
+    }
+
+    @Test
+    fun testUnSubscribeDuringOnNewState() {
+        // setup
+        val reducer = TestValueStringReducer()
+        val store = Store(reducer = reducer::handleAction, state = TestStringAppState())
+
+        val subscriberA = ViewSubscriberTypeA(store)
+        val subscriberC = ViewSubscriberTypeC()
+        store.subscribe(subscriberA)
+        store.subscribe(subscriberC)
+
+        // execute
+        store.dispatch(SetValueStringAction("unsubscribe"))
+    }
+
 }
