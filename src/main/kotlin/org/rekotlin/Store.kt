@@ -1,5 +1,7 @@
 package org.rekotlin
 
+import java.util.concurrent.CopyOnWriteArrayList
+
 /**
  * Created by Taras Vozniuk on 31/07/2017.
  * Copyright © 2017 GeoThings. All rights reserved.
@@ -54,7 +56,7 @@ class Store<State: StateType> (
                 middleware(dispatch, getState)(dispatchFunction)
             })
 
-    val subscriptions: MutableList<SubscriptionBox<State, Any>> = arrayListOf()
+    val subscriptions: MutableList<SubscriptionBox<State, Any>> = CopyOnWriteArrayList()
 
     private var isDispatching = false
 
