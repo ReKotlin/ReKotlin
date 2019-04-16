@@ -114,6 +114,38 @@ internal class TestStoreSubscriber<T> : StoreSubscriber<T> {
     }
 }
 
+/**
+ * A subscriber contains another sub-subscribers [StoreSubscriber], which could be subscribe/unsubscribe at some point
+ */
+internal class ViewSubscriberTypeA(var store: Store<TestStringAppState>) : StoreSubscriber<TestStringAppState> {
+    private val viewB by lazy { ViewSubscriberTypeB(store) }
+    private val viewC by lazy { ViewSubscriberTypeC() }
+
+    override fun newState(state: TestStringAppState) {
+        when(state.testValue){
+            "subscribe" -> store.subscribe(viewC)
+            "unsubscribe" ->  store.unsubscribe(viewB)
+            else -> println(state.testValue)
+        }
+    }
+}
+
+internal class ViewSubscriberTypeB(store: Store<TestStringAppState>) : StoreSubscriber<TestStringAppState> {
+    init {
+        store.subscribe(this)
+    }
+
+    override fun newState(state: TestStringAppState) {
+        // do nothing
+    }
+}
+
+internal class ViewSubscriberTypeC : StoreSubscriber<TestStringAppState> {
+    override fun newState(state: TestStringAppState) {
+        // do nothing
+    }
+}
+
 internal class DispatchingSubscriber(var store: Store<TestAppState>) : StoreSubscriber<TestAppState> {
 
     override fun newState(state: TestAppState) {

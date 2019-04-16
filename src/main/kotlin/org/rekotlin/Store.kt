@@ -54,7 +54,7 @@ class Store<State: StateType> (
                 middleware(dispatch, getState)(dispatchFunction)
             })
 
-    val subscriptions: MutableList<SubscriptionBox<State, Any>> = mutableListOf()
+    val subscriptions: MutableList<SubscriptionBox<State, Any>> = arrayListOf()
 
     private var isDispatching = false
 
