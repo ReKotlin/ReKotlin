@@ -1,8 +1,14 @@
 def libraryGroup = 'org.rekotlin'
 def libraryVersion = '1.0.3'
 
+apply plugin: 'kotlin'
+apply plugin: 'org.jetbrains.dokka'
+apply plugin: 'org.junit.platform.gradle.plugin'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven-publish'
+
 buildscript {
-    ext.kotlin_version = '1.3.30'
+    ext.kotlin_version = '1.3.31'
     ext.dokka_version = '0.9.18'
     ext.junitPlugin_version = '1.0.0'
     ext.junit_jupiter_version = '5.0.0-M6'
@@ -20,15 +26,9 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:${dokka_version}"
         classpath "org.junit.platform:junit-platform-gradle-plugin:${junitPlugin_version}"
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
     }
 }
-
-apply plugin: 'kotlin'
-apply plugin: 'maven-publish'
-apply plugin: 'org.jetbrains.dokka'
-apply plugin: 'org.junit.platform.gradle.plugin'
-apply plugin: 'com.jfrog.bintray'
 
 repositories {
     mavenCentral()
