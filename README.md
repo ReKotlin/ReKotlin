@@ -247,6 +247,12 @@ val store = Store(
 	automaticallySkipRepeats = false)
 ```
 
+### Subscribe/Unsubscribe during `newState`
+
+Under the hood ReKotlin uses a [`CopyOnWriteArrayList`](https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/CopyOnWriteArrayList.html) to manage subscriptions (see [PR 29](https://github.com/ReKotlin/ReKotlin/pull/29) for more details). This implementation detail means that the number of concurrent writes to the subscriptions should be less than the number of concurrent reads.
+
+In terms of using the library this means that un/subscribing may incur a performance overhead if done during `newState` in store subscribers. We recommend to restrict this usage (concurrent write while reading subscriptions) as much as possible, i.e. avoid `subscribe` or `unsubscribe` in calls to `newState`.
+
 ## Contributing
 
 Please format your code using ``kotlinFormatter.xml`` file from [here](Docs/kotlinFormatter.xml)
