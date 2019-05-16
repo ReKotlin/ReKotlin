@@ -1,8 +1,4 @@
-package tw.geothings.rekotlin.junit
-
-import org.junit.jupiter.api.Test
-import tw.geothings.rekotlin.*
-import javax.swing.plaf.nimbus.State
+package org.rekotlin
 
 /**
  * Created by Taras Vozniuk on 10/08/2017.
@@ -28,30 +24,32 @@ import javax.swing.plaf.nimbus.State
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-internal data class TestAppState(val testValue: Int? = null): StateType
+internal data class TestAppState(val testValue: Int? = null) : StateType
 
-internal data class TestStringAppState(val testValue: String = "Initial"): StateType
+internal data class TestStringAppState(val testValue: String = "Initial") : StateType
 
-internal data class TestCustomSubstate(val value: Int): StateType
+internal data class TestCustomSubstate(val value: Int) : StateType
 
-internal data class TestCustomAppState(val substate: TestCustomSubstate): StateType {
-    constructor(substateValue: Int = 0): this(TestCustomSubstate(substateValue))
+internal data class TestBlockState(val testAppState: TestAppState? = null, val testStringAppState: TestStringAppState? = null) : StateType
+
+internal data class TestCustomAppState(val substate: TestCustomSubstate) : StateType {
+    constructor(substateValue: Int = 0) : this(TestCustomSubstate(substateValue))
 }
 
-internal data class NoOpAction(val unit: Unit = Unit): Action {}
-internal data class SetValueAction(val value: Int?): Action {
+internal data class NoOpAction(val unit: Unit = Unit) : Action
+internal data class SetValueAction(val value: Int?) : Action {
     companion object {
         val type = "SetValueAction"
     }
 }
 
-internal data class SetValueStringAction(var value: String): Action {
+internal data class SetValueStringAction(var value: String) : Action {
     companion object {
         val type = "SetValueStringAction"
     }
 }
 
-internal data class SetCustomSubstateAction(val value: Int): Action {
+internal data class SetCustomSubstateAction(val value: Int) : Action {
     companion object {
         val type = "SetCustomSubstateAction"
     }
@@ -62,7 +60,7 @@ internal class TestReducer {
         @Suppress("NAME_SHADOWING")
         var state = state ?: TestAppState()
 
-        when(action){
+        when (action) {
             is SetValueAction -> {
                 state = state.copy(testValue = action.value)
             }
@@ -77,7 +75,7 @@ internal class TestValueStringReducer {
         @Suppress("NAME_SHADOWING")
         var state = state ?: TestStringAppState()
 
-        when(action){
+        when (action) {
             is SetValueStringAction -> {
                 state = state.copy(testValue = action.value)
             }
@@ -92,7 +90,7 @@ internal class TestCustomAppStateReducer {
         @Suppress("NAME_SHADOWING")
         var state = state ?: TestCustomAppState()
 
-        when(action){
+        when (action) {
             is SetCustomSubstateAction -> {
                 state = state.copy(substate = state.substate.copy(action.value))
             }
@@ -100,10 +98,15 @@ internal class TestCustomAppStateReducer {
 
         return state
     }
-
 }
 
-internal class TestStoreSubscriber<T>: StoreSubscriber<T> {
+internal fun blockStateReducer(action: Action, testBlockState: TestBlockState?): TestBlockState =
+        TestBlockState(
+                testAppState = TestReducer().handleAction(action, testBlockState?.testAppState),
+                testStringAppState = TestValueStringReducer().handleAction(action, testBlockState?.testStringAppState)
+        )
+
+internal class TestStoreSubscriber<T> : StoreSubscriber<T> {
     var recievedStates: MutableList<T> = mutableListOf()
 
     override fun newState(state: T) {
@@ -111,18 +114,18 @@ internal class TestStoreSubscriber<T>: StoreSubscriber<T> {
     }
 }
 
-internal class DispatchingSubscriber(var store: Store<TestAppState>): StoreSubscriber<TestAppState> {
+internal class DispatchingSubscriber(var store: Store<TestAppState>) : StoreSubscriber<TestAppState> {
 
     override fun newState(state: TestAppState) {
         // Test if we've already dispatched this action to
         // avoid endless recursion
-        if (state.testValue != 5){
+        if (state.testValue != 5) {
             this.store.dispatch(SetValueAction(5))
         }
     }
 }
 
-internal class CallbackStoreSubscriber<T>(val handler: (T) -> Unit): StoreSubscriber<T> {
+internal class CallbackStoreSubscriber<T>(val handler: (T) -> Unit) : StoreSubscriber<T> {
     override fun newState(state: T) {
         handler(state)
     }

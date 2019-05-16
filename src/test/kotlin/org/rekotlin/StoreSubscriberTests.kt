@@ -1,11 +1,8 @@
+package org.rekotlin
+
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
-import tw.geothings.rekotlin.Action
-import tw.geothings.rekotlin.StateType
 
-import tw.geothings.rekotlin.Store
-import tw.geothings.rekotlin.StoreSubscriber
-import tw.geothings.rekotlin.junit.*
 
 /**
  * Created by Taras Vozniuk on 10/08/2017.

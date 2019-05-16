@@ -1,10 +1,7 @@
-package tw.geothings.rekotlin.junit
+package org.rekotlin
 
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import tw.geothings.rekotlin.Middleware
-import tw.geothings.rekotlin.StateType
-import tw.geothings.rekotlin.Store
 
 /**
  * Created by Taras Vozniuk on 10/08/2017.
@@ -72,7 +69,7 @@ internal val stateAccessingMiddleware: Middleware<TestStringAppState> = { dispat
             val stringAction = action as? SetValueStringAction
 
             // avoid endless recursion by checking if we've dispatched exactly this action
-            if (appState?.testValue == "OK" && stringAction?.value != "Not OK"){
+            if (appState?.testValue == "OK" && stringAction?.value != "Not OK") {
                 // dispatch a new action
                 dispatch(SetValueStringAction("Not OK"))
 
@@ -91,7 +88,7 @@ internal class StoreMiddlewareTests {
      * it can decorate dispatch function
      */
     @Test
-    fun testDecorateDispatch(){
+    fun testDecorateDispatch() {
 
         val reducer = TestValueStringReducer()
         val store = Store(

@@ -1,13 +1,6 @@
-import org.junit.jupiter.api.Test
-import tw.geothings.rekotlin.Action
-import tw.geothings.rekotlin.ReKotlinInit
-import tw.geothings.rekotlin.StateType
-import tw.geothings.rekotlin.Store
+package org.rekotlin
 
 /**
- * Created by Taras Vozniuk on 10/08/2017.
- * Copyright © 2017 GeoThings. All rights reserved.
- *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -28,32 +21,4 @@ import tw.geothings.rekotlin.Store
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-internal class StoreTests {
-
-    /**
-     * it dispatches an Init action when it doesn't receive an initial state
-     */
-    @Test
-    fun testInit() {
-        val reducer = MockReducer()
-        Store(reducer::handleAction, null)
-
-        assert(reducer.calledWithAction[0] is ReKotlinInit)
-    }
-
-    // testDeinit() is not relevant in JVM
-
-}
-
-internal data class CounterState(var count: Int = 0): StateType
-
-internal class MockReducer {
-
-    val calledWithAction: MutableList<Action> = mutableListOf()
-
-    fun handleAction(action: Action, state: CounterState?): CounterState {
-        calledWithAction.add(action)
-
-        return state ?: CounterState()
-    }
-}
+typealias Reducer<ReducerStateType> = (action: Action, state: ReducerStateType?) -> ReducerStateType

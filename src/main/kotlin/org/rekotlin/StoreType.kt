@@ -1,9 +1,6 @@
-package tw.geothings.rekotlin
+package org.rekotlin
 
 /**
- * Created by Taras Vozniuk on 07/08/2017.
- * Copyright © 2017 GeoThings. All rights reserved.
- *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -25,7 +22,7 @@ package tw.geothings.rekotlin
  */
 
 /**
- * Defines the interface of Stores in ReSwift. `Store` is the default implementation of this
+ * Defines the interface of Stores in ReKotlin. `Store` is the default implementation of this
  * interface. Applications have a single store that stores the entire application state.
  * Stores receive actions and use reducers combined with these actions, to calculate state changes.
  * Upon every state update a store informs all of its subscribers.

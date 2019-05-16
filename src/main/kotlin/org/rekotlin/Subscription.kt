@@ -1,9 +1,6 @@
-package tw.geothings.rekotlin
+package org.rekotlin
 
 /**
- * Created by Taras Vozniuk on 07/08/2017.
- * Copyright © 2017 GeoThings. All rights reserved.
- *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -35,9 +32,9 @@ package tw.geothings.rekotlin
  * subscription and passes any values that come through this subscriptions to the subscriber.
  *
  */
-class SubscriptionBox<State, SelectedState>(val originalSubscription: Subscription<State>,
-                             transformedSubscription: Subscription<SelectedState>?,
-                             val subscriber: StoreSubscriber<SelectedState>) where State: StateType {
+class SubscriptionBox<State, SelectedState>(private val originalSubscription: Subscription<State>,
+                                            transformedSubscription: Subscription<SelectedState>?,
+                                            val subscriber: StoreSubscriber<SelectedState>) where State: StateType {
 
     // hoping to mimic swift weak reference
     // however this doesn't really work the same way, gc collects non-deterministically
@@ -85,6 +82,7 @@ class SubscriptionBox<State, SelectedState>(val originalSubscription: Subscripti
 
 class Subscription<State> {
 
+    @Suppress("FunctionName")
     private fun <Substate> _select(selector: ((State) -> Substate)): Subscription<Substate> {
         return Subscription { sink ->
             this.observe { oldState, newState ->
@@ -109,11 +107,11 @@ class Subscription<State> {
      * thus should be skipped and not forwarded to subscribers.
      *
      */
-    fun skipRepeats(isRepeat: (oldState: State, newState: State) -> Boolean): Subscription<State>{
+    fun skipRepeats(isRepeat: (oldState: State, newState: State) -> Boolean): Subscription<State> {
         return Subscription { sink ->
             this.observe { oldState, newState ->
                 oldState?.let {
-                    if (!isRepeat(oldState, newState)){
+                    if (!isRepeat(oldState, newState)) {
                         sink(oldState, newState)
                     }
 
@@ -126,7 +124,7 @@ class Subscription<State> {
      * Provides a subscription that skips repeated updates of the original subscription
      * Repeated updates determined by structural equality
      */
-    fun skipRepeats(): Subscription<State>{
+    fun skipRepeats(): Subscription<State> {
         return this.skipRepeats { oldState, newState ->
             oldState == newState
         }
@@ -138,7 +136,7 @@ class Subscription<State> {
      * @param when A closure that determines whether a given state update is a repeat and
      * thus should be skipped and not forwarded to subscribers.
      */
-    fun skip(`when`: (oldState: State, newState: State) -> Boolean): Subscription<State>{
+    fun skip(`when`: (oldState: State, newState: State) -> Boolean): Subscription<State> {
         return this.skipRepeats(`when`)
     }
 
@@ -148,7 +146,7 @@ class Subscription<State> {
      * This is effectively the inverse of skipRepeats(:)
      * @param whenBlock A closure that determines whether a given state update should notify
      */
-    fun only(whenBlock: (oldState: State, newState: State) -> Boolean): Subscription<State>{
+    fun only(whenBlock: (oldState: State, newState: State) -> Boolean): Subscription<State> {
         return this.skipRepeats { oldState, newState ->
             !whenBlock(oldState, newState)
         }
@@ -157,7 +155,7 @@ class Subscription<State> {
     // endregion
 
     // region: Internals
-    var observer: ((State?, State) -> Unit)? = null
+    private var observer: ((State?, State) -> Unit)? = null
 
     init {}
     constructor()

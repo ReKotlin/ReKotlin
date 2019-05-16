@@ -1,9 +1,6 @@
-package tw.geothings.rekotlin
+package org.rekotlin
 
 /**
- * Created by Taras Vozniuk on 31/07/2017.
- * Copyright © 2017 GeoThings. All rights reserved.
- *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -24,4 +21,6 @@ package tw.geothings.rekotlin
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-typealias Reducer<ReducerStateType> = (action: Action, state: ReducerStateType?) -> ReducerStateType
+interface StoreSubscriber<StoreSubscriberStateType> {
+    fun newState(state: StoreSubscriberStateType)
+}

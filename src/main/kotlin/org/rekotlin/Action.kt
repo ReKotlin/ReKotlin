@@ -1,9 +1,6 @@
-package tw.geothings.rekotlin
+package org.rekotlin
 
 /**
- * Created by Taras Vozniuk on 07/08/2017.
- * Copyright © 2017 GeoThings. All rights reserved.
- *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -24,6 +21,14 @@ package tw.geothings.rekotlin
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-interface StoreSubscriber<StoreSubscriberStateType> {
-    fun newState(state: StoreSubscriberStateType)
-}
+/**
+ * All actions that want to be able to be dispatched to a store need to conform to this protocol
+ * Currently it is just a marker protocol with no requirements.
+ */
+interface Action
+
+/**
+ * Initial Action that is dispatched as soon as the store is created.
+ * Reducers respond to this action by configuring their initial state.
+ */
+class ReKotlinInit: Action

@@ -1,7 +1,7 @@
+package org.rekotlin
+
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
-import tw.geothings.rekotlin.Store
-import tw.geothings.rekotlin.junit.*
 
 /**
  * Created by Taras Vozniuk on 10/08/2017.
@@ -57,7 +57,7 @@ internal class StoreSubscriptionTests {
      * it removes subscribers before notifying state changes
      */
     @Test
-    fun testRemoveSubscribers(){
+    fun testRemoveSubscribers() {
         store = Store(reducer::handleAction, TestAppState())
         val subscriber1 = TestSubscriber()
         val subscriber2 = TestSubscriber()
@@ -87,7 +87,7 @@ internal class StoreSubscriptionTests {
      * it replaces the subscription of an existing subscriber with the new one.
      */
     @Test
-    fun testDuplicateSubscription(){
+    fun testDuplicateSubscription() {
         store = Store(reducer::handleAction, TestAppState())
         val subscriber = TestSubscriber()
 
@@ -125,7 +125,7 @@ internal class StoreSubscriptionTests {
      * it allows dispatching from within an observer
      */
     @Test
-    fun testAllowDispatchWithinObserver(){
+    fun testAllowDispatchWithinObserver() {
         store = Store(reducer::handleAction, TestAppState())
         val subscriber = DispatchingSubscriber(store)
 
@@ -188,5 +188,25 @@ internal class StoreSubscriptionTests {
         store.subscribe(subscriber) { it }
 
         assertEquals(1, store.subscriptions.count())
+    }
+
+    @Test
+    fun testBlockSubscriber() {
+        val store = Store(reducer = ::blockStateReducer, state = null)
+
+        val subscriber = BlockSubscriber<TestAppState?> { }
+        val subscriber2 = BlockSubscriber<TestStringAppState?> { }
+        val blockSubscriptions = BlockSubscriptions()
+
+        store.subscribe(subscriber) { it.select { it.testAppState } }
+        store.subscribe(subscriber2) { it.select { it.testStringAppState } }
+
+        blockSubscriptions.add(subscriber)
+        blockSubscriptions.add(subscriber2)
+
+        assertEquals(2, store.subscriptions.count())
+
+        store.unsubscribe(blockSubscriptions)
+        assertEquals(0, store.subscriptions.count())
     }
 }

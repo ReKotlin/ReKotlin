@@ -1,6 +1,8 @@
-## ReKotlin (preview)
+## ReKotlin
 
 [![License MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/ReSwift/ReSwift/blob/master/LICENSE.md)
+[![Build Status](https://travis-ci.org/ReKotlin/ReKotlin.svg?branch=master)](https://travis-ci.org/ReKotlin/ReKotlin)
+[![Download](https://api.bintray.com/packages/rekotlin/rekotlin/rekotlin/images/download.svg) ](https://bintray.com/rekotlin/rekotlin/rekotlin/_latestVersion)
 
 Port of [ReSwift](https://github.com/ReSwift/ReSwift) to Kotlin, which corresponds to [ReSwift/4.0.0](https://github.com/ReSwift/ReSwift/releases/tag/4.0.0)
 
@@ -13,7 +15,6 @@ ReKotlin is a [Redux](https://github.com/reactjs/redux)-like implementation of t
 - **State Changes**: in a ReKotlin app you can only perform state changes through actions. Actions are small pieces of data that describe a state change. By drastically limiting the way state can be mutated, your app becomes easier to understand and it gets easier to work with many collaborators.
 
 The ReKotlin library is tiny - allowing users to dive into the code, understand every single line and hopefully contribute.
-
 
 ## About ReKotlin
 
@@ -74,10 +75,44 @@ class MainActivity : AppCompatActivity(){
 ```
 
 
-Lastly, your view layer, in this case an activity, needs to tie into this system by subscribing to store updates and emitting actions whenever the app state needs to be changed:
+Lastly, your view layer, in this case an activity,
+needs to tie into this system by subscribing to store updates and
+emitting actions whenever the app state needs to be changed
+(assuming that `snake_case` View properties are coming from [Kotlin Android Extensions](https://kotlinlang.org/docs/tutorials/android-plugin.html)):
 
 ```kotlin
 class MainActivity : AppCompatActivity(), StoreSubscriber<AppState> {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        // when either button is tapped, an action is dispatched to the store
+        // in order to update the application state
+        button_up.setOnClickListener {
+            mainStore.dispatch(CounterActionIncrease())
+        }
+        button_down.setOnClickListener {
+            mainStore.dispatch(CounterActionDecrease())
+        }
+
+        // subscribe to state changes
+        mainStore.subscribe(this)
+    }
+
+    override fun newState(state: AppState) {
+        // when the state changes, the UI is updated to reflect the current state
+        counter_label.text = "${state.counter}"
+    }
+}
+```
+
+The `newState` method will be called by the `Store` whenever a new app state is available, this is where we need to adjust our view to reflect the latest app state.
+
+When working with multiple states in a single class, BlockSubscriber can be used for listening to states in it's specific closure instead of using StoreSubscriber<>
+
+```kotlin
+class MainActivity : AppCompatActivity() {
 
     private val counterLabel: TextView by lazy {
         this.findViewById(R.id.counter_label) as TextView
@@ -94,6 +129,10 @@ class MainActivity : AppCompatActivity(), StoreSubscriber<AppState> {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        
+        val appStateSubscriber = BlockSubscriber<AppState> { appState ->
+            this.counterLabel.text = "${appState.counter}"
+        }
 
         // when either button is tapped, an action is dispatched to the store
         // in order to update the application state
@@ -105,23 +144,22 @@ class MainActivity : AppCompatActivity(), StoreSubscriber<AppState> {
         }
 
         // subscribe to state changes
-        mainStore.subscribe(this)
-    }
-
-    override fun newState(state: AppState) {
-        // when the state changes, the UI is updated to reflect the current state
-        this.counterLabel.text = "${state.counter}"
+        mainStore.subscribe(appStateSubscriber)
     }
 }
 ```
 
-The `newState` method will be called by the `Store` whenever a new app state is available, this is where we need to adjust our view to reflect the latest app state.
-
 Button taps result in dispatched actions that will be handled by the store and its reducers, resulting in a new app state.
 
-This is a very basic example that only shows a subset of ReKotlin's features, read the Getting Started Guide __(not ported yet)__ to see how you can build entire apps with this architecture. For a complete implementation of this example see the [ReKotlin-CounterExample](https://github.com/GeoThings/ReKotlin-CounterExample) project.
+This is a very basic example that only shows a subset of ReKotlin's features, read the Getting Started Guide __(not ported yet)__ to see how you can build entire apps with this architecture.
 
 [You can also watch this talk on the motivation behind the original ReSwift](https://realm.io/news/benji-encz-unidirectional-data-flow-swift/).
+
+## Examples
+
+- [ReduxMovieExample](https://github.com/ReKotlin/ReduxMovieExample) - An application which uses an API to display movies and stores favorites into a local database.
+- [rekotlin-router-github-example](https://github.com/ReKotlin/rekotlin-router-github-example) - An application which displays user's github repositories along with authentication and navigation using [rekotlin-router](https://github.com/ReKotlin/rekotlin-router)
+- [ReKotlin-CounterExample](https://github.com/GeoThings/ReKotlin-CounterExample) - A simple counter application
 
 ## Why ReKotlin?
 
@@ -152,20 +190,10 @@ To get an understanding of the core principles we recommend reading the brillian
 
 ## Installation
 
-We are still in preview here, so the package is not yet available at maven central repository. Instead please use our development repository:
-
 ```gradle
-// build.gradle
-repositories {
-    maven {
-        url 'https://rekotlin.s3-ap-southeast-1.amazonaws.com/snapshots'
-    }
-}
-
 dependencies {
-	compile 'tw.geothings.rekotlin:rekotlin:0.1.0-SNAPSHOT'
+    implementation 'org.rekotlin:rekotlin:1.0.0'
 }
-
 ```
 
 ## Differences with ReSwift
@@ -218,6 +246,11 @@ val store = Store(
 	state, 
 	automaticallySkipRepeats = false)
 ```
+
+## Contributing
+
+Please format your code using ``kotlinFormatter.xml`` file from [here](Docs/kotlinFormatter.xml)
+Using this code formatter will help us maintain consistency in code style.
 
 ## Credits
 

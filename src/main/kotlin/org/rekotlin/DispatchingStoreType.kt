@@ -1,9 +1,6 @@
-package tw.geothings.rekotlin
+package org.rekotlin
 
 /**
- * Created by Taras Vozniuk on 31/07/2017.
- * Copyright © 2017 GeoThings. All rights reserved.
- *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -25,13 +22,24 @@ package tw.geothings.rekotlin
  */
 
 /**
- * All actions that want to be able to be dispatched to a store need to conform to this protocol
- * Currently it is just a marker protocol with no requirements.
+ * Defines the interface of a dispatching, stateless Store in ReKotlin. `StoreType` is
+ * the default usage of this interface. Can be used for store variables where you don't
+ * care about the state, but want to be able to dispatch actions.
  */
-interface Action {}
+interface DispatchingStoreType {
 
-/**
- * Initial Action that is dispatched as soon as the store is created.
- * Reducers respond to this action by configuring their initial state.
- */
-class ReKotlinInit: Action {}
+    /**
+     * Dispatches an action. This is the simplest way to modify the stores state.
+     *
+     * Example of dispatching an action:
+     * <pre>
+     * <code>
+     * store.dispatch( CounterAction.IncreaseCounter )
+     * </code>
+     * </pre>
+     *
+     * @param action The action that is being dispatched to the store
+     * @return By default returns the dispatched action, but middlewares can change the type, e.g. to return promises
+     */
+    fun dispatch(action: Action)
+}

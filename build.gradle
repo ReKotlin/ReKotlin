@@ -1,40 +1,45 @@
-group 'tw.geothings.rekotlin'
-version '0.1.0-SNAPSHOT'
+def libraryGroup = 'org.rekotlin'
+def libraryVersion = '1.0.3'
+
+apply plugin: 'kotlin'
+apply plugin: 'org.jetbrains.dokka'
+apply plugin: 'org.junit.platform.gradle.plugin'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven-publish'
 
 buildscript {
-    ext.kotlin_version = '1.1.3-2'
-    ext.dokka_version = '0.9.15'
+    ext.kotlin_version = '1.3.31'
+    ext.dokka_version = '0.9.18'
     ext.junitPlugin_version = '1.0.0'
     ext.junit_jupiter_version = '5.0.0-M6'
-    ext.junit_platform_launcher= "1.0.0-M6"
+    ext.junit_platform_launcher = "1.0.0-M6"
 
     repositories {
         mavenCentral()
         jcenter()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:${dokka_version}"
         classpath "org.junit.platform:junit-platform-gradle-plugin:${junitPlugin_version}"
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
     }
-
-
 }
-
-apply plugin: 'kotlin'
-apply plugin: 'maven-publish'
-apply plugin: 'org.jetbrains.dokka'
-apply plugin: 'org.junit.platform.gradle.plugin'
-
-
 
 repositories {
     mavenCentral()
+    jcenter()
+    maven {
+        url "https://plugins.gradle.org/m2/"
+    }
 }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     testCompile "org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version"
     testRuntime "org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version"
     testRuntime "org.junit.platform:junit-platform-launcher:$junit_platform_launcher"
@@ -45,17 +50,36 @@ test {
         events 'started', 'passed'
     }
 }
+
 compileKotlin {
     sourceCompatibility = JavaVersion.VERSION_1_7
     targetCompatibility = JavaVersion.VERSION_1_7
-
     kotlinOptions.jvmTarget = "1.6"
 }
 compileTestKotlin {
     sourceCompatibility = JavaVersion.VERSION_1_7
     targetCompatibility = JavaVersion.VERSION_1_7
-
     kotlinOptions.jvmTarget = "1.6"
+}
+
+bintray {
+    user = System.getenv('bintrayUser')
+    key = System.getenv('bintrayKey')
+    publications = ['rekotlin']
+    pkg {
+        repo = 'rekotlin'
+        name = 'rekotlin'
+        userOrg = 'rekotlin'
+        websiteUrl = 'https://github.com/ReKotlin/ReKotlin'
+        vcsUrl = 'https://github.com/ReKotlin/ReKotlin.git'
+        licenses = ["MIT"]
+        publish = true
+        version {
+            name = libraryVersion
+            desc = 'ReKotlin Library'
+            released = new Date()
+        }
+    }
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
@@ -82,34 +106,13 @@ artifacts {
 
 publishing {
     publications {
-        maven(MavenPublication) {
-            groupId 'tw.geothings.rekotlin'
+        rekotlin(MavenPublication) {
+            groupId libraryGroup
             artifactId 'rekotlin'
+            version libraryVersion
             from components.java
-
-            artifact(javadocJar){
-                classifier = 'javadoc'
-            }
-
-            artifact(sourcesJar){
-                classifier = 'sources'
-            }
-
-            repositories {
-
-                /*
-                maven {
-                    url 's3://rekotlin/snapshots'
-                    credentials(AwsCredentials) {
-                        accessKey AWS_ACCESS_KEY   // put this in gradle.properties
-                        secretKey AWS_SECRET_KEY   // put this in gradle.properties
-                    }
-                }*/
-
-                maven {
-                    url "file:/${project.projectDir}/artifacts"
-                }
-            }
+            artifact(javadocJar)
+            artifact(sourcesJar)
         }
     }
 }
