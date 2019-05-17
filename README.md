@@ -171,7 +171,7 @@ This approach involves a lot of manual steps and is thus error prone and doesn't
 
 It also leads to code that is difficult to understand at a glance, since dependencies can be hidden deep inside of view controllers. Lastly, you mostly end up with inconsistent code, where each developer uses the state propagation procedure they personally prefer. You can circumvent this issue by style guides and code reviews but you cannot automatically verify the adherence to these guidelines.
 
-ReKotlin attempts to solve these problem by placing strong constraints on the way applications can be written. This reduces the room for programmer error and leads to applications that can be easily understood - by inspecting the application state data structure, the actions and the reducers.
+ReKotlin attempts to solve these problems by placing strong constraints on the way applications can be written. This reduces the room for programmer error and leads to applications that can be easily understood - by inspecting the application state data structure, the actions and the reducers.
 
 This architecture provides further benefits beyond improving your code base:
 
@@ -183,7 +183,7 @@ The ReKotlin tooling is still in a very early stage, but aforementioned prospect
 
 ## Getting Started Guide
 
-Getting started guide has not yet been ported. In the meantime, please refer to original ReSwift's:
+The Getting Started Guide has not yet been ported. In the meantime, please refer to original ReSwift's:
 [Getting Started Guide that describes the core components of apps built with ReSwift](http://reswift.github.io/ReSwift/master/getting-started-guide.html). 
 
 To get an understanding of the core principles we recommend reading the brilliant [redux documentation](http://redux.js.org/).
