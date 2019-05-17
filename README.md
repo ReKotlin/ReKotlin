@@ -175,7 +175,7 @@ ReKotlin attempts to solve these problems by placing strong constraints on the w
 
 This architecture provides further benefits beyond improving your code base:
 
-- Stores, Reducers, Actions and extensions such as [ReSwift Router](https://github.com/ReKotlin/rekotlin-router)  are entirely platform independent - you can easily use the same business logic and share it between apps for multiple platforms
+- Stores, Reducers, Actions and extensions such as [ReKotlin Router](https://github.com/ReKotlin/rekotlin-router)  are entirely platform independent - you can easily use the same business logic and share it between apps for multiple platforms
 - Want to collaborate with a co-worker on fixing an app crash? Use __(port not yet available)__ [ReSwift Recorder](https://github.com/ReSwift/ReSwift-Recorder) to record the actions that lead up to the crash and send them the JSON file so that they can replay the actions and reproduce the issue right away.
 - Maybe recorded actions can be used to build UI and integration tests?
 
