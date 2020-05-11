@@ -45,6 +45,7 @@ repositories {
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     testCompile "org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version"
+    testCompile "org.mockito:mockito-core:3.3.3"
     testRuntime "org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version"
     testRuntime "org.junit.platform:junit-platform-launcher:$junit_platform_launcher"
 }
