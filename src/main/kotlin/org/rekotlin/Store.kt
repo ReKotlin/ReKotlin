@@ -100,7 +100,11 @@ class Store<State : StateType>(
         val originalSubscription = Subscription<State>()
         // Call the optional transformation closure. This allows callers to modify
         // the subscription, e.g. in order to subselect parts of the store's state.
-        val transformedSubscription = transform?.invoke(originalSubscription)
+        val transformedSubscription = if (subscribersAutomaticallySkipsRepeat) {
+            transform?.invoke(originalSubscription)?.skipRepeats()
+        } else {
+            transform?.invoke(originalSubscription)
+        }
 
         val subscriptionBox = SubscriptionBox(originalSubscription, transformedSubscription, subscriber)
 
