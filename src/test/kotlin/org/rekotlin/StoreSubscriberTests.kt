@@ -158,7 +158,7 @@ internal class StoreSubscriberTests {
         store.dispatch(SetValueStringAction("Initial"))
 
         assertEquals("Initial", subscriber.recievedValue)
-        assertEquals(2, subscriber.newStateCallCount)
+        assertEquals(1, subscriber.newStateCallCount)
     }
 
     @Test
