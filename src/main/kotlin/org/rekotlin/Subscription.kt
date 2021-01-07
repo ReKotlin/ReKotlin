@@ -32,10 +32,10 @@ package org.rekotlin
  * subscription and passes any values that come through this subscriptions to the subscriber.
  *
  */
-class SubscriptionBox<State, SelectedState>(
+class SubscriptionBox<State, in SelectedState>(
     private val originalSubscription: Subscription<State>,
     transformedSubscription: Subscription<SelectedState>?,
-    val subscriber: StoreSubscriber<SelectedState>
+    val subscriber: StoreSubscriber<in SelectedState>
 ) where State : StateType {
 
     // hoping to mimic swift weak reference

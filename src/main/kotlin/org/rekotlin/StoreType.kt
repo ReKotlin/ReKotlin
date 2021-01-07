@@ -46,7 +46,7 @@ interface StoreType<State : StateType> : DispatchingStoreType {
      * state in this store changes.
      * @param subscriber: Subscriber that will receive store updates
      */
-    fun <S : StoreSubscriber<State>> subscribe(subscriber: S)
+    fun <S : StoreSubscriber<in State>> subscribe(subscriber: S)
 
     /**
      * Subscribes the provided subscriber to this store.
@@ -59,7 +59,7 @@ interface StoreType<State : StateType> : DispatchingStoreType {
      * transformed subscription. Subscriptions can be transformed to only select a subset of the
      * state, or to skip certain state updates.
      */
-    fun <SelectedState, S : StoreSubscriber<SelectedState>> subscribe(
+    fun <SelectedState, S : StoreSubscriber<in SelectedState>> subscribe(
         subscriber: S,
         transform: ((Subscription<State>) -> Subscription<SelectedState>)?
     )

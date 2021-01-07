@@ -72,7 +72,7 @@ class Store<State : StateType>(
         this._state?.let { this._state = state } ?: this.dispatch(ReKotlinInit())
     }
 
-    override fun <S : StoreSubscriber<State>> subscribe(subscriber: S) {
+    override fun <S : StoreSubscriber<in State>> subscribe(subscriber: S) {
 
         // if subscribersAutomaticallySkipsRepeat is set
         // skipRepeats will be applied with kotlin structural equality
@@ -85,7 +85,7 @@ class Store<State : StateType>(
         }
     }
 
-    override fun <SelectedState, S : StoreSubscriber<SelectedState>> subscribe(
+    override fun <SelectedState, S : StoreSubscriber<in SelectedState>> subscribe(
         subscriber: S,
         transform: ((Subscription<State>) -> Subscription<SelectedState>)?
     ) {
